@@ -1,14 +1,7 @@
+		
+		
 
-import sys, numpy as np, os, random
 
-# first argument is init file
-# second argument is intermidiate file - must be empty or absent in the begining
-# third argument is output file - will be overwritten
-
-# check sys.argv and assign defaultsif empty
-
-def getScriptPath():
-    return os.path.dirname(os.path.realpath(sys.argv[0]))
 # control variables
 controls = [[0,WIDHT],[0,HEIGHT]]
 params = {'POPN' : 40, 'PARENTS' : 15, 'MRATE' : 0.05, 'TOURN' : 0 }
@@ -21,7 +14,7 @@ dim = len(controls)
 
 # now read second param which is a intermidiate file
 # if file is not there or empty -> first iteration
-if not os.path.isfile(dumpFile) :#or os.stat("file").st_size == 0:
+def init_controls()
 	# generate POPN - population
 	# random values in every column based on given ranges
 	
