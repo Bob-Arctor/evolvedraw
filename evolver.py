@@ -31,9 +31,9 @@ class Evolver(object) :
 	def startPool(self):
 		self.curpool = []
 		for i in range(self.population):
-			dude = np.random.choice(np.arange(self.controls[0][0],self.controls[0][1]),size=(self.dim[0],self.dim[1]),replace=False)
+			dude = np.random.choice(np.arange(self.controls[0][0],self.controls[0][1]),size=(self.dim[0],self.dim[1]),replace=True)
 			for col in range(1,dude.shape[1]):
-				dude[:,col] = np.random.choice(np.arange(self.controls[col][0],self.controls[col][1]),size=(self.dim[0]),replace=False)
+				dude[:,col] = np.random.choice(np.arange(self.controls[col][0],self.controls[col][1]),size=(self.dim[0]),replace=True)
 			self.curpool.append(dude)
 		self.curpool = np.array(self.curpool)
 			
@@ -93,10 +93,7 @@ controls = [[0,500],[0,500],[0,500],[0,500],[0,255],[0,255],[0,255]]
 population = 10
 parents = 4
 mrate = 0.1
-figures = 3
-
-st = (controls[0][1] - controls[0][0]) / population
-p = np.random.choice(np.arange(controls[0][0],controls[0][1]), size=(population,len(controls)), replace=False)
+figures = 300
 
 ev = Evolver(population, parents, mrate, controls, figures)
 print(ev.curpool)
