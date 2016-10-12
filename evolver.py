@@ -85,7 +85,7 @@ class Evolver(object) :
         if len(self.fittest) is 1:
             self.errors.append(100)
         else:
-            self.errors.append((self.fittest[-1][1]/self.fittest[-2][1])*100)
+            self.errors.append((self.fittest[-1][1]/self.fittest[0][1])*100)
         
 
 
