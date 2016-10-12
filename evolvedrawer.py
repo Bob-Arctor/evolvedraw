@@ -1,5 +1,5 @@
 from PIL import Image, ImageDraw 
-import evolver, math, sys
+import evolver, math, sys, time, os
 
 w = 254
 h = 254
@@ -70,12 +70,28 @@ ev = evolver.Evolver(population, parents, mrate, controls, figures)
 
 print('-'*50)
 print('starting evolution image matching for %s'%sys.argv[1])
+print('total generations planned: %d'%generations)
+
+# create logfile
+now = time.strftime("%c")
+newpath = r'Log %s'%now 
+if not os.path.exists(newpath):
+    os.makedirs(newpath)
+    
+filename = os.path.join(newpath,"evolution log %s"%now)
+logfile = open(filename, 'w+')
+
 
 for i in range(generations):
     ev.evolve(fitfunc)
-    print('generation %d error:  %.2f'%(i, ev.fittest[-1][1]))
-    
-makepic(ev.fittest[-1][0], True, "result.jpg")
+    print('generation %d error:  %3.2f%% (%.2f)'%(i, ev.errors[-1], ev.fittest[-1][1]))
+    logfile.write('%s : generation %d error:  %3.2f%% (%.2f)\n'%(now,i,ev.errors[-1],ev.fittest[-1][1]))
+
+logfile.close()
+
+filename = os.path.join(newpath,"result.jpg")    
+makepic(ev.fittest[-1][0], True, filename)
+print('result file was saved to %s'%filename)
 
 
     

@@ -27,6 +27,8 @@ class Evolver(object) :
         self.prevfit = np.zeros((1, self.population))
         # list of the fittest
         self.fittest = []
+        # array of errors in %
+        self.errors = []
         
     def startPool(self):
         self.curpool = []
@@ -80,6 +82,10 @@ class Evolver(object) :
         # find the fittest and save
         fittestInd = np.argmin(self.curfit[:,-1])
         self.fittest.append((self.prevpool[fittestInd], self.curfit[fittestInd,-1]))
+        if len(self.fittest) is 1:
+            self.errors.append(100)
+        else:
+            self.errors.append((self.fittest[-1][1]/self.fittest[-2][1])*100)
         
 
 
