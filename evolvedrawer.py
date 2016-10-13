@@ -81,11 +81,15 @@ if not os.path.exists(newpath):
 filename = os.path.join(newpath,"evolution log %s"%now)
 logfile = open(filename, 'w+')
 
+# name for temp image file
+tmp = os.path.join(newpath,"result_tmp.jpg")
 
 for i in range(generations):
     ev.evolve(fitfunc)
     print('generation %d error:  %3.2f%% (%.2f)'%(i, ev.errors[-1], ev.fittest[-1][1]))
     logfile.write('%s : generation %d error:  %3.2f%% (%.2f)\n'%(now,i,ev.errors[-1],ev.fittest[-1][1]))
+    # save temporary best fit file
+    makepic(ev.fittest[-1][0], False, tmp)
 
 logfile.close()
 
