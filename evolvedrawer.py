@@ -5,12 +5,12 @@ w = 50
 h = 50
 opacity = 200
 
-controls = [[0,w],[0,h],[0,w/4],[0,h/4],[0,255],[0,255],[0,255]]
+controls = [[0,w],[0,h],[0,w/6],[0,h/6],[0,255],[0,255],[0,255]]
 population = 40
 parents = 20
 mrate = 0.05
 figures = 300
-generations = 5
+generations = 3
 
 # moments = photos.get_albums()
 # asset = photos.pick_asset(moments[4], title='Pick your image', multi=False)
@@ -86,15 +86,15 @@ tmp = os.path.join(newpath,"result_tmp.jpg")
 
 for i in range(generations):
     ev.evolve(fitfunc)
-    print('generation %d error:  %3.2f%% (%.2f)'%(i, ev.errors[-1], ev.fittest[-1][1]))
-    logfile.write('%s : generation %d error:  %3.2f%% (%.2f)\n'%(now,i,ev.errors[-1],ev.fittest[-1][1]))
+    print('generation %d error:  %3.2f%% (%.2f)'%(i, ev.errors[-1][0],ev.errors[-1][1]))
+    logfile.write('%s : generation %d error:  %3.2f%% (%.2f)\n'%(now,i,ev.errors[-1][0],ev.errors[-1][1]))
     # save temporary best fit file
-    makepic(ev.fittest[-1][0], False, tmp)
+    makepic(ev.fittest_curgen[0], False, tmp)
 
 logfile.close()
 
 filename = os.path.join(newpath,"result.jpg")    
-makepic(ev.getFittest(), True, filename)
+makepic(ev.fittest[0], True, filename)
 print('result file was saved to %s'%filename)
 
 

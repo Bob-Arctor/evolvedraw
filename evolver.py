@@ -25,9 +25,11 @@ class Evolver(object) :
         self.curfit = np.zeros((1, self.population))
         # previous population fitness
         self.prevfit = np.zeros((1, self.population))
-        # list of the fittest
+        # fittest overall (creature, error)
         self.fittest = []
-        # array of errors in %
+        # fittest current gen (creature, error)
+        self.fitest_curgen = []
+        # array of errors in (%,real value)
         self.errors = []
         
     def startPool(self):
@@ -38,10 +40,6 @@ class Evolver(object) :
                 dude[:,col] = np.random.choice(np.arange(self.controls[col][0],self.controls[col][1]),size=(self.dim[0]),replace=True)
             self.curpool.append(dude)
         self.curpool = np.array(self.curpool)
-        
-    def getFittest(self):
-        fittestInd = np.argmin(self.errors)
-        return self.fittest[fittestInd][0]
             
     def evolve(self, fitfunc):
         # fitfunc takes vector and returns its fitness
@@ -85,11 +83,17 @@ class Evolver(object) :
             self.curpool[i] = np.multiply(dude, mutants)
         # find the fittest and save
         fittestInd = np.argmin(self.curfit[:,-1])
-        self.fittest.append((self.prevpool[fittestInd], self.curfit[fittestInd,-1]))
-        if len(self.fittest) is 1:
-            self.errors.append(100)
+        self.fittest_curgen = (self.prevpool[fittestInd], self.curfit[fittestInd,-1])
+        # save errors
+        if not self.fittest:
+            self.errors.append((100, self.fittest_curgen[1]))
+            # save as best result
+            self.fittest = self.fittest_curgen
         else:
-            self.errors.append((self.fittest[-1][1]/self.fittest[0][1])*100)
+            self.errors.append((((self.fittest_curgen[1]/self.errors[0][1])*100), self.fittest_curgen[1]))
+            #check if best result and save
+            if self.fittest_curgen[1] < self.fittest[1]:
+                self.fittest = self.fittest_curgen
         
 
 
