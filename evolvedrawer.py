@@ -1,8 +1,8 @@
 from PIL import Image, ImageDraw 
-import evolver, math, sys, time, os
+import evolver, math, sys, time, os, numpy as np
 
-w = 50
-h = 50
+w = 100
+h = 100
 opacity = 200
 
 controls = [[0,w],[0,h],[0,w/6],[0,h/6],[0,255],[0,255],[0,255]]
@@ -10,7 +10,7 @@ population = 40
 parents = 20
 mrate = 0.05
 figures = 300
-generations = 3
+generations = 10
 
 # moments = photos.get_albums()
 # asset = photos.pick_asset(moments[4], title='Pick your image', multi=False)
@@ -32,6 +32,8 @@ if scale != 1:
     height = int(height/scale)
     img = img.resize((width, height),Image.LANCZOS)
 img.show()
+# convert to floats for fitness calculations
+imarray = np.asfarray(img)
 
 imgw = img.size[0]
 imgh = img.size[1]
@@ -47,13 +49,23 @@ def fitfunc(dude):
         drawer.ellipse([f[0],f[1],f[0]+f[2],f[1]+f[3]],(int(f[4]), int(f[5]), int(f[6]), opacity))
     # calculate error
     err = 0
+    # convert to float
+    paintarr = np.asfarray(painting)
+    # error = distance between pixels
+    err = (imarray - paintarr)**2
+    # sum 3 coords
+    err = np.array([ [sum(y) for y in x] for x  in err])
+    err = np.sqrt(err)/(imarray.shape[0]*imarray.shape[1])
+    # total
+    err = sum(sum(err))
+    return err
+    """
     for i in range(img.size[0]):
         for j in range(img.size[1]):
             r, g, b = img.getpixel((i, j))    
             rp, gp, bp = painting.getpixel((i,j))
             err = err + math.sqrt( (r-rp)**2 + (g-gp)**2 + (b-bp)**2 )
-    return err
-    
+    """
 
 def makepic(dude, showimage = False, filename = None):
     drawer = ImageDraw.Draw(painting, 'RGBA')
