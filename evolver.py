@@ -38,6 +38,10 @@ class Evolver(object) :
                 dude[:,col] = np.random.choice(np.arange(self.controls[col][0],self.controls[col][1]),size=(self.dim[0]),replace=True)
             self.curpool.append(dude)
         self.curpool = np.array(self.curpool)
+        
+    def getFittest(self):
+        fittestInd = np.argmin(self.errors)
+        return self.fittest[fittestInd][0]
             
     def evolve(self, fitfunc):
         # fitfunc takes vector and returns its fitness

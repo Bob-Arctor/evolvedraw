@@ -1,8 +1,8 @@
 from PIL import Image, ImageDraw 
 import evolver, math, sys, time, os
 
-w = 254
-h = 254
+w = 50
+h = 50
 opacity = 200
 
 controls = [[0,w],[0,h],[0,w/4],[0,h/4],[0,255],[0,255],[0,255]]
@@ -10,7 +10,7 @@ population = 40
 parents = 20
 mrate = 0.05
 figures = 300
-generations = 2
+generations = 5
 
 # moments = photos.get_albums()
 # asset = photos.pick_asset(moments[4], title='Pick your image', multi=False)
@@ -90,7 +90,7 @@ for i in range(generations):
 logfile.close()
 
 filename = os.path.join(newpath,"result.jpg")    
-makepic(ev.fittest[-1][0], True, filename)
+makepic(ev.getFittest(), True, filename)
 print('result file was saved to %s'%filename)
 
 
