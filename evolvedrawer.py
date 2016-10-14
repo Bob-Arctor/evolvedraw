@@ -10,7 +10,7 @@ population = 40
 parents = 20
 mrate = 0.05
 figures = 300
-generations = 10
+generations = 4
 
 # moments = photos.get_albums()
 # asset = photos.pick_asset(moments[4], title='Pick your image', multi=False)
@@ -54,10 +54,10 @@ def fitfunc(dude):
     # error = distance between pixels
     err = (imarray - paintarr)**2
     # sum 3 coords
-    err = np.array([ [sum(y) for y in x] for x  in err])
-    err = np.sqrt(err)/(imarray.shape[0]*imarray.shape[1])
+    # err = np.array([ [sum(y) for y in x] for x  in err])
+    # err = np.sqrt(err)/(imarray.shape[0]*imarray.shape[1])
     # total
-    err = sum(sum(err))
+    err = np.sum(err)/(imarray.shape[0]*imarray.shape[1])
     return err
     """
     for i in range(img.size[0]):
@@ -66,6 +66,16 @@ def fitfunc(dude):
             rp, gp, bp = painting.getpixel((i,j))
             err = err + math.sqrt( (r-rp)**2 + (g-gp)**2 + (b-bp)**2 )
     """
+
+def dummyfit(dude):
+    err = 0
+    # convert to float
+    paintarr = np.asfarray(painting)
+    # error = distance between pixels
+    err = (imarray - paintarr)**2
+    # sum 3 coords
+    return np.random.rand()
+    
 
 def makepic(dude, showimage = False, filename = None):
     drawer = ImageDraw.Draw(painting, 'RGBA')
@@ -97,8 +107,10 @@ logfile = open(filename, 'w+')
 tmp = os.path.join(newpath,"result_tmp.jpg")
 
 for i in range(generations):
+    # ev.evolve(dummyfit)
     ev.evolve(fitfunc)
     print('generation %d error:  %3.2f%% (%.2f)'%(i, ev.errors[-1][0],ev.errors[-1][1]))
+    now = time.strftime("%c")
     logfile.write('%s : generation %d error:  %3.2f%% (%.2f)\n'%(now,i,ev.errors[-1][0],ev.errors[-1][1]))
     # save temporary best fit file
     makepic(ev.fittest_curgen[0], False, tmp)
@@ -107,7 +119,10 @@ logfile.close()
 
 filename = os.path.join(newpath,"result.jpg")    
 makepic(ev.fittest[0], True, filename)
-print('result file was saved to %s'%filename)
+print('result image was saved to %s'%filename)
+
+# save best fit array
+
 
 
     
